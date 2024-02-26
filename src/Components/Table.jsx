@@ -18,64 +18,82 @@ const TableComponent = ({ dataList }) => {
     setRecordsPerPage(parseInt(e.target.value));
     setCurrentPage(1);
   };
+
   return dataList && dataList.length > 0 ? (
     <>
-      <h3 className="text-center">Data-table</h3>
-      <div className="mt-4">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Text Input</th>
-              <th scope="col">Number Input</th>
-              <th scope="col">Radio Input</th>
-              <th scope="col">Checkbox Input</th>
-              <th scope="col">Dropdown Input</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentRecords.map((data, index) => (
-              <tr key={index}>
-                <td>{data.textInput}</td>
-                <td>{data.numberInput}</td>
-                <td>{data.radioInput}</td>
-                <td>{data.checkboxInput ? "Checked" : ""}</td>
-                <td>{data.dropdownInput.join(",")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="pagination">
-          <span>Records per page:</span>
-          <select
-            className="form-select form-select-sm"
-            onChange={handleChangeRecordsPerPage}
-            value={recordsPerPage}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-          </select>
-          <nav>
-            <ul className="pagination">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <li
-                    className={`page-item ${
-                      page === currentPage ? "active" : ""
-                    }`}
-                    key={page}
+      <div className="card mb-5">
+        <div className="card-header">
+          <h3 className="text-center">Data-table</h3>
+        </div>
+        <div className="card-body">
+          <div className="mt-4">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Text Input</th>
+                  <th scope="col">Number Input</th>
+                  <th scope="col">Radio Input</th>
+                  <th scope="col">Checkbox Input</th>
+                  <th scope="col">Dropdown Input</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentRecords.map((data, index) => (
+                  <tr key={index}>
+                    <td>{data.textInput}</td>
+                    <td>{data.numberInput}</td>
+                    <td>{data.radioInput}</td>
+                    <td>{data.checkboxInput ? "Checked" : ""}</td>
+                    <td>{data.dropdownInput.join(",")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="pagination d-flex justify-content-between align-items-center">
+              <div className="d-flex" style={{ flex: 0.7 }}>
+                <div style={{ marginRight: "2rem" }}>
+                  <span>Records per page:</span>
+                </div>
+                <div>
+                  <select
+                    className="form-select form-select-sm form-control"
+                    onChange={handleChangeRecordsPerPage}
+                    value={recordsPerPage}
                   >
-                    <button
-                      className="page-link"
-                      onClick={() => handleChangePage(page)}
-                    >
-                      {page}
-                    </button>
-                  </li>
-                )
-              )}
-            </ul>
-          </nav>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+              </div>
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{ flex: 0.3 }}
+              >
+                <div>
+                  <ul className="pagination d-flex align-items-center">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => (
+                        <li
+                          className={`page-item ${
+                            page === currentPage ? "active" : ""
+                          }`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => handleChangePage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
