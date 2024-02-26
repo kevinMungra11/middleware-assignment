@@ -5,3 +5,5 @@ export const initialValues = {
   checkboxInput: false,
   dropdownInput: [],
 };
+
+export const ADD_DATA = "ADD_DATA";

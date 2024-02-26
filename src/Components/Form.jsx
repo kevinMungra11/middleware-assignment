@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
-import TableComponent from "./Table";
 import { initialValues } from "../Constant/constant";
+import { useDispatch } from "react-redux";
+import { ADD_DETAIL } from "../store/action";
+import Select from "react-select";
 
 const FormComponent = () => {
+  const options = [
+    { value: "option1", label: "Option 1" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+    { value: "option4", label: "Option 4" },
+    { value: "option5", label: "Option 5" },
+  ];
   const [formValues, setFormValues] = useState(initialValues);
-  const [dataList, setDataList] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const datalist = JSON.parse(localStorage.getItem("dataList"));
-    setDataList(datalist);
     const savedData = localStorage.getItem("formData");
     if (savedData) {
       setFormValues((data) => {
@@ -20,6 +28,13 @@ const FormComponent = () => {
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formValues));
   }, [formValues]);
+
+  const handleDropDown = (selected) => {
+    setFormValues((prev) => ({
+      ...prev,
+      dropdownInput: [...selected],
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked, options } = e.target;
@@ -39,7 +54,6 @@ const FormComponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(Object.values(formValues));
     if (
       Object.values(formValues).every((value) => {
         if (typeof value === "string") {
@@ -51,16 +65,9 @@ const FormComponent = () => {
         }
       })
     ) {
-      const dataList = JSON.parse(localStorage.getItem("dataList"));
-      if (!dataList)
-        localStorage.setItem("dataList", JSON.stringify([formValues]));
-      else {
-        dataList.push(formValues);
-        localStorage.setItem("dataList", JSON.stringify(dataList));
-      }
+      dispatch(ADD_DETAIL(formValues));
       localStorage.removeItem("formData");
       setFormValues(initialValues);
-      setDataList(() => JSON.parse(localStorage.getItem("dataList")));
     } else {
       alert("Please fill in all fields");
     }
@@ -136,9 +143,16 @@ const FormComponent = () => {
               </div>
               <div className="form-group">
                 <label>Dropdown Input:</label>
-                <select
+                <Select
                   name="dropdownInput"
-                  multiple
+                  isMulti
+                  options={options}
+                  value={formValues.dropdownInput}
+                  onChange={handleDropDown}
+                />
+                {/* <select
+                  name="dropdownInput"
+                  multiple={true}
                   value={formValues.dropdownInput}
                   onChange={handleChange}
                   className="form-select"
@@ -147,7 +161,7 @@ const FormComponent = () => {
                   <option value="option1">Option 1</option>
                   <option value="option2">Option 2</option>
                   <option value="option3">Option 3</option>
-                </select>
+                </select> */}
               </div>
               <button type="submit" className="btn btn-primary">
                 Submit
@@ -156,7 +170,6 @@ const FormComponent = () => {
           </div>
         </div>
       </div>
-      <TableComponent dataList={dataList}></TableComponent>
     </>
   );
 };

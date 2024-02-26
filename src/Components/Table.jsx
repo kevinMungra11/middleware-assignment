@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const TableComponent = ({ dataList }) => {
+const TableComponent = () => {
+  const dataList = useSelector((state) => state.dataList);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
 
@@ -27,7 +29,7 @@ const TableComponent = ({ dataList }) => {
         </div>
         <div className="card-body">
           <div className="mt-4">
-            <table className="table">
+            <table className="table table-striped">
               <thead>
                 <tr>
                   <th scope="col">Text Input</th>
@@ -44,7 +46,9 @@ const TableComponent = ({ dataList }) => {
                     <td>{data.numberInput}</td>
                     <td>{data.radioInput}</td>
                     <td>{data.checkboxInput ? "Checked" : ""}</td>
-                    <td>{data.dropdownInput.join(",")}</td>
+                    <td>
+                      {data.dropdownInput.map((val) => val.value).join(",")}
+                    </td>
                   </tr>
                 ))}
               </tbody>
